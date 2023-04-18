@@ -1,19 +1,31 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerDamage : Damagables
 {
-    private int initialHealth = 1000;
-
+    [SerializeField] float yAxisThreshold = -5;
+    [SerializeField] float initialHealth = 1000;
+    
     Material playerMaterial;
     bool isCooling;
 
-    private void OnEnable()
+    public Action<float> OnHealthUpdate;
+
+    Transform m_Transform;
+
+    private void Start()
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         playerMaterial = spriteRenderer.material;
         playerMaterial.SetInt("_Flicker", 0);
+
+        m_Transform = transform;
+    }
+    private void Update()
+    {
+        Vector3 myPos = m_Transform.position;
+        if (myPos.y < yAxisThreshold) AddDamage((int)initialHealth + 1);
     }
 
     public override void AddDamage(int damage)
@@ -21,9 +33,10 @@ public class PlayerDamage : Damagables
         if (isCooling) return;
 
         base.AddDamage(damage);
+        if(OnHealthUpdate != null) OnHealthUpdate(GetCurrentHealthNormalized());
+
         StartCoroutine(TriggerFlickeringEffect());
     }
-
     IEnumerator TriggerFlickeringEffect()
     {
         playerMaterial?.SetInt("_Flicker", 1);
@@ -32,7 +45,6 @@ public class PlayerDamage : Damagables
         isCooling = false;
         playerMaterial?.SetInt("_Flicker", 0);
     }
-
     protected override void OnKill()
     {
         Animator animator = GetComponent<Animator>();
@@ -48,12 +60,16 @@ public class PlayerDamage : Damagables
         CharacterMovement characterMovement = GetComponent<CharacterMovement>();
         characterMovement.enabled = false;
 
+        GameManager.Instance.GameplayMode?.OnLoss();
+
         Destroy(gameObject, 2);
     }
-
     protected override void ResetHealth()
     {
-        base.health = initialHealth;
+        base.health = (int) initialHealth;
     }
-    
+    public float GetCurrentHealthNormalized()
+    {
+        return (health / initialHealth);
+    }
 }

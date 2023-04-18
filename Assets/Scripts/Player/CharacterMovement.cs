@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -56,6 +52,8 @@ public class CharacterMovement : MonoBehaviour
     private void Start()
     {
         animController = GetComponent<PlayerAnimationController>();
+
+        GameManager.Instance.RegisterPlayer(this.gameObject);
     }
 
     void Update()

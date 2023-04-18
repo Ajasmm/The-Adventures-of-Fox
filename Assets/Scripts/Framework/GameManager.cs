@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +8,13 @@ public class GameManager : MonoBehaviour
     }
     private static GameManager instance;
 
+    public GameplayMode GameplayMode { 
+        get { return gameplayMode; }
+    }
+    private GameplayMode gameplayMode;
+
+    public GameObject player { get; private set; }
+
     public MyInput input;
 
     private static bool isGameFinished = false;
@@ -18,7 +23,6 @@ public class GameManager : MonoBehaviour
     {
         input = new MyInput();
     }
-
     private void OnEnable()
     {
         if(GameManager.instance == null)
@@ -31,6 +35,7 @@ public class GameManager : MonoBehaviour
     {
         isGameFinished = true;
     }
+
     private static GameManager GetInstance()
     {
         if (isGameFinished) return null;
@@ -41,5 +46,15 @@ public class GameManager : MonoBehaviour
             gameManagerObj.AddComponent<GameManager>();
         }
         return GameManager.instance;
+    }
+    public void RegisterGamePlayMode(GameplayMode gameplayMode)
+    {
+        this.gameplayMode?.OnStop();
+        this.gameplayMode = gameplayMode;
+        this.gameplayMode?.OnStart();
+    }
+    public void RegisterPlayer(GameObject player)
+    {
+        this.player = player;
     }
 }
