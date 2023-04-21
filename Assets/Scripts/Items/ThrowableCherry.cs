@@ -54,7 +54,6 @@ public class ThrowableCherry : MonoBehaviour
     {
         m_Transform.parent = null;
         m_Transform.position = pos;
-        Debug.Log(pos);
 
         this.directon = direction;
         this.gameObject.SetActive(true);

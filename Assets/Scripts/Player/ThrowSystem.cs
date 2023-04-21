@@ -44,7 +44,6 @@ public class ThrowSystem : MonoBehaviour
                 return;
             }
 
-            Debug.Log("Player Pos " + m_Transform.position + throwOffset);
             throwable.Enable(m_Transform.position + throwOffset, Vector3.right * m_Transform.localScale.x);
         }
     }
