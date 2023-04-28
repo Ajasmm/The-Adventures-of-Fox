@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
         {
             GameManager.instance = this;
             DontDestroyOnLoad(gameObject);
+            AudioManager.Instance.SetVolume(AudioChannels.MASTER, 1.0f);
         }else if (GameManager.instance != this) Destroy(gameObject);
     }
     private void OnDestroy()

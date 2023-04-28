@@ -45,6 +45,9 @@ public class AudioManager : MonoBehaviour
             case AudioChannels.SFX:
                 audioChannelString = "SFX Volume";
                 break;
+            case AudioChannels.MASTER:
+                audioChannelString = "Master Volume";
+                break;
         }
 
         if(audioChannelString != null) masterMixer.SetFloat(audioChannelString, VolumeToDB(NormalizedVolume));
@@ -58,6 +61,7 @@ public class AudioManager : MonoBehaviour
 
 public enum AudioChannels
 {
+    MASTER,
     MUSIC,
     SFX
 }

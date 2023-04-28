@@ -10,6 +10,9 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] int jumpHeight = 3;
     [SerializeField] LayerMask layerMaskforGroundCheck;
 
+    [Header("Audio")]
+    [SerializeField] private AudioControler audioControl;
+
     Transform myTransform;
     Rigidbody2D rBody;
     CapsuleCollider2D capsuleCollider;
@@ -23,6 +26,7 @@ public class CharacterMovement : MonoBehaviour
 
     bool crouch = false;
     bool isGrounded = false;
+    bool isFalling = false;
 
     private void Awake()
     {
@@ -68,18 +72,18 @@ public class CharacterMovement : MonoBehaviour
         animController.SetIsGrounded(isGrounded);
 
         Crouch();
-        Fall();
+        isFalling = IsFalling();
 
         switch (playerState)
         {
-            case PlayerState.Normal: 
+            case PlayerState.Normal:
                 WhileNormal();
                 break;
-            case PlayerState.Jump: 
-                WhileJump(); 
+            case PlayerState.Jump:
+                WhileJump();
                 break;
-            case PlayerState.Crouch: 
-                WhileCrouch(); 
+            case PlayerState.Crouch:
+                WhileCrouch();
                 break;
             case PlayerState.Fall:
                 WhileFalling();
@@ -133,14 +137,15 @@ public class CharacterMovement : MonoBehaviour
             animController.Crouch(false);
         }
     }
-    private void Fall()
+    private bool IsFalling()
     {
         if (velocity.y < -0.05F && !isGrounded && playerState != PlayerState.Fall)
         {
             playerState = PlayerState.Fall;
             animController.Fall();
         }
-    } 
+        return (playerState == PlayerState.Fall);
+    }
 
     private void JumpAction(InputAction.CallbackContext context)
     {
@@ -152,16 +157,20 @@ public class CharacterMovement : MonoBehaviour
             rBody.velocity = velocity;
 
             animController.Jump();
+            isGrounded = false;
 
             playerState = PlayerState.Jump;
+            audioControl.Jump();
+
+            rBody.MovePosition(rBody.position + (Vector2.up * 0.02F));
         }
     }
     private void CrouchAction(InputAction.CallbackContext context)
     {
-        crouch = (context.phase == InputActionPhase.Performed)? true : false;
+        crouch = (context.phase == InputActionPhase.Performed) ? true : false;
     }
 
-   
+
     private void WhileNormal()
     {
         velocity.x = horizontalMovement;
@@ -175,7 +184,8 @@ public class CharacterMovement : MonoBehaviour
     private void WhileJump()
     {
         velocity.x = horizontalMovement;
-        if (isGrounded) playerState = PlayerState.Normal;
+        if (isGrounded)
+            playerState = PlayerState.Normal;
     }
     private void WhileFalling()
     {
@@ -183,6 +193,7 @@ public class CharacterMovement : MonoBehaviour
         {
             playerState = PlayerState.Normal;
             animController.Grounded();
+            audioControl.Land();
         }
         velocity.x = horizontalMovement;
     }

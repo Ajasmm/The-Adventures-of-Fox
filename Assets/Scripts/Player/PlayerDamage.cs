@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class PlayerDamage : Damagables
 {
+    [Header("Damage")]
     [SerializeField] float yAxisThreshold = -5;
     [SerializeField] float initialHealth = 1000;
-    
+
+    [Header("Audio")]
+    [SerializeField] private AudioControler audioControl;
+
     Material playerMaterial;
     bool isCooling;
 
@@ -34,6 +38,7 @@ public class PlayerDamage : Damagables
 
         base.AddDamage(damage);
         if(OnHealthUpdate != null) OnHealthUpdate(GetCurrentHealthNormalized());
+        audioControl.Damage();
 
         StartCoroutine(TriggerFlickeringEffect());
     }

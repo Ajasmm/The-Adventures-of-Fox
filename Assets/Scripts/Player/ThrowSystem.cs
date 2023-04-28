@@ -6,8 +6,12 @@ using UnityEngine.InputSystem;
 
 public class ThrowSystem : MonoBehaviour
 {
+    [Header("Throw System")]
     [SerializeField] CollectableType type;
     [SerializeField] ThrowableCherry trowableObject;
+
+    [Header("Audio")]
+    [SerializeField] private AudioControler audioControl;
 
     int poolSize = 10;
     Vector3 throwOffset = new Vector3(0, 1, 0);
@@ -44,6 +48,7 @@ public class ThrowSystem : MonoBehaviour
                 return;
             }
 
+            audioControl.Throw();
             throwable.Enable(m_Transform.position + throwOffset, Vector3.right * m_Transform.localScale.x);
         }
     }
