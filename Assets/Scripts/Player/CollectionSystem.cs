@@ -14,16 +14,5 @@ public class CollectionSystem : MonoBehaviour
 
         collectable.Collect();
         Inventory.Instance.AddItem(collectable.type);
-
-        switch (collectable.type)
-        {
-            case CollectableType.Cherry:
-                audioControl.Cherry();
-                break;
-            case CollectableType.Gems:
-                audioControl.Gem();
-                break;
-        }
-
     }
 }

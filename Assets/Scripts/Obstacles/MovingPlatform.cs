@@ -46,7 +46,7 @@ public class MovingPlatform : MonoBehaviour
         }
 
         // adding the moving velocity to the player
-        player?.SetPlatformVelocity((currentPos - rbody.position) * (1 / Time.fixedDeltaTime));
+        if(movementDirection == PlatformDirection.RIGHT) player?.SetPlatformVelocity((currentPos - rbody.position) * (1 / Time.fixedDeltaTime));
 
         // applying the current position to the rigidbody
         rbody.MovePosition(currentPos);

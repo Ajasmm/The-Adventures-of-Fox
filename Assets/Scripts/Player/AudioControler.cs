@@ -10,10 +10,6 @@ public class AudioControler : MonoBehaviour
     [SerializeField] private AudioSource _throw;
     [SerializeField] private AudioSource _damage;
 
-    [Header("Collection")]
-    [SerializeField] private AudioSource _cherry;
-    [SerializeField] private AudioSource _gem;
-
     // Player
     public void Jump()
     {
@@ -22,7 +18,6 @@ public class AudioControler : MonoBehaviour
     public void Land()
     {
         PlayAudio(_land);
-        Debug.Log("Land Methode Called with " + _land.name);
     }
     public void Throw()
     {
@@ -31,16 +26,6 @@ public class AudioControler : MonoBehaviour
     public void Damage()
     {
         PlayAudio(_damage);
-    }
-
-    // Collection System
-    public void Cherry()
-    {
-        PlayAudio(_cherry);
-    }
-    public void Gem()
-    {
-        PlayAudio(_gem);
     }
 
     private void PlayAudio(AudioSource source)
