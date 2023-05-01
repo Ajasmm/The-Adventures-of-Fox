@@ -6,7 +6,6 @@ public class AudioControler : MonoBehaviour
 {
     [Header("Player")]
     [SerializeField] private AudioSource _jump;
-    [SerializeField] private AudioSource _land;
     [SerializeField] private AudioSource _throw;
     [SerializeField] private AudioSource _damage;
 
@@ -14,10 +13,6 @@ public class AudioControler : MonoBehaviour
     public void Jump()
     {
         PlayAudio(_jump);
-    }
-    public void Land()
-    {
-        PlayAudio(_land);
     }
     public void Throw()
     {

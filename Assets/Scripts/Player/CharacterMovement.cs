@@ -193,7 +193,6 @@ public class CharacterMovement : MonoBehaviour
         {
             playerState = PlayerState.Normal;
             animController.Grounded();
-            audioControl.Land();
         }
         velocity.x = horizontalMovement;
     }
