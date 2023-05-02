@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -36,7 +35,7 @@ public class InteractionSystem : MonoBehaviour
     {
         IInteractable interactable = collision.gameObject.GetComponentInParent<IInteractable>();
         if (interactable != null) interactables.Add(interactable);
-
+         
         this.interactable = interactable;
     }
     private void OnTriggerExit2D(Collider2D collision)
