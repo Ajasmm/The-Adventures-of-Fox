@@ -1,3 +1,4 @@
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public abstract class Damagables : MonoBehaviour
@@ -7,7 +8,7 @@ public abstract class Damagables : MonoBehaviour
 
     protected int health = 1000;
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         ResetHealth();
     }

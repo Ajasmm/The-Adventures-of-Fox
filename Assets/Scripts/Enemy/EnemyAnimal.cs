@@ -2,10 +2,11 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent (typeof(Animator))]
+[ExecuteAlways]
 public class EnemyAnimal : Damagables
 {
     [SerializeField] int damage = 250;
-    [SerializeField] Collider2D collider;
+    [SerializeField] Collider2D enemyCollider;
     [SerializeField] AudioSource destroySound;
 
     Transform myTransform;
@@ -32,7 +33,7 @@ public class EnemyAnimal : Damagables
     protected override void OnKill()
     {
         animator.SetTrigger("Kill");
-        if(collider) collider.enabled = false;
+        if(enemyCollider) enemyCollider.enabled = false;
         destroySound.Play();
 
         Destroy(this.gameObject, 1F);

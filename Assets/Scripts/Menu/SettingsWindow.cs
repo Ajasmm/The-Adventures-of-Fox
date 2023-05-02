@@ -1,3 +1,4 @@
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -20,6 +21,14 @@ public class SettingsWindow : MonoBehaviour
 
         input = GameManager.Instance.input;
         input.Menu.Escape.performed += OnEscape;
+
+        float _musicVolume = GameManager.Instance.settingsData.musicVolume;
+        float _sfxVolume = GameManager.Instance.settingsData.sfxVolume;
+
+        OnMusicVolumeChange(_musicVolume);
+        OnSFXVolumeChange(_sfxVolume);
+        musicVolume.value = _musicVolume;
+        sfxVolume.value = _sfxVolume;
     }
     private void OnDisable()
     {

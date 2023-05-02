@@ -30185,6 +30185,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager/GamePlayMode/Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7096472208493879904, guid: b544e63b4a513944a889287145347d48, type: 3}
+      propertyPath: level
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b544e63b4a513944a889287145347d48, type: 3}
 --- !u!1001 &1586627495

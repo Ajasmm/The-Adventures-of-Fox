@@ -49,8 +49,7 @@ public class PauseMenu : MonoBehaviour
     private void OnMenu()
     {
         SetActiveButtons(false);
-
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(0);
     }
 
     private void SetActiveButtons(bool state)

@@ -257,5 +257,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rBody: {fileID: 6806054325312561946}
   damage: 250
-  collider: {fileID: 6806054325312561927}
+  enemyCollider: {fileID: 6806054325312561927}
   destroySound: {fileID: 6346960234410015150}
