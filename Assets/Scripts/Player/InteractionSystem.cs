@@ -14,7 +14,6 @@ public class InteractionSystem : MonoBehaviour
     {
         interactables = new HashSet<IInteractable>();
     }
-
     private void OnEnable()
     {
         input = GameManager.Instance.input;
@@ -24,6 +23,10 @@ public class InteractionSystem : MonoBehaviour
     private void OnDisable()
     {
         input.GamePlay.Interact.performed -= Interact;
+    }
+    private void Start()
+    {
+        UpdateController();
     }
 
     private void Interact(InputAction.CallbackContext context)

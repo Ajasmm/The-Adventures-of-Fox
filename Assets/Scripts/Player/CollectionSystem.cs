@@ -16,6 +16,13 @@ public class CollectionSystem : MonoBehaviour
         inventory.Clear();
         SyncWithInventory();
     }
+    private void Start()
+    {
+        // Updating the throw button if the cherry count is changed
+        // also adding cherry to the inventory if there is no cherry
+        if (!inventory.ContainsKey(CollectableType.Cherry)) inventory.Add(CollectableType.Cherry, 0);
+        GameManager.Instance.androidController?.SetThrowButton(inventory[CollectableType.Cherry] > 0);
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Collectables collectable = collision.gameObject.GetComponent<Collectables>();
@@ -24,7 +31,7 @@ public class CollectionSystem : MonoBehaviour
         collectable.Collect();
         AddItem(collectable.type, 1);
 
-        if (OnItemCollected != null) OnItemCollected(collectable.type, inventory[collectable.type]);
+        InvokeUpdate(collectable.type, inventory[collectable.type]);
     }
     
     public int GetItemCount(CollectableType type)
@@ -39,7 +46,7 @@ public class CollectionSystem : MonoBehaviour
         {
             if (!inventory.ContainsKey(item.type)) inventory.Add(item.type, 0);
             inventory[item.type] = item.count;
-            if (OnItemCollected != null) OnItemCollected(item.type, inventory[item.type]);
+            InvokeUpdate(item.type, inventory[item.type]);
         }
     }
     public void UpdateMainInventory()
@@ -55,14 +62,23 @@ public class CollectionSystem : MonoBehaviour
         if (inventory[type] < count) return false;
 
         inventory[type] -= count;
-        if(OnItemCollected != null) OnItemCollected(type, inventory[type]);
+        InvokeUpdate(type, inventory[type]);
         return true;
     }
     public void AddItem(CollectableType type, int count)
     {
         if (!inventory.ContainsKey(type)) inventory.Add(type, 0);
         inventory[type] += count;
-        if (OnItemCollected != null) OnItemCollected(type, inventory[type]);
+        InvokeUpdate(type, inventory[type]);
+    }
+    private void InvokeUpdate(CollectableType type, int count)
+    {
+        if (OnItemCollected != null) OnItemCollected(type, count);
+
+        // Updating the throw button if the cherry count is changed
+        // also adding cherry to the inventory if there is no cherry
+        if(!inventory.ContainsKey(CollectableType.Cherry)) inventory.Add(CollectableType.Cherry, 0);
+        if(type == CollectableType.Cherry) GameManager.Instance.androidController?.SetThrowButton(inventory[CollectableType.Cherry] > 0);
     }
 
 }
