@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameplayMode : MonoBehaviour
 {
@@ -74,12 +75,21 @@ public class GameplayMode : MonoBehaviour
     public void OnWin()
     {
         OnStop();
+        Inventory.Instance.Save();
+        GameManager.Instance.player?.GetComponent<CollectionSystem>().ResetInventory();
         if(win_UI) win_UI.SetActive(true);
     }
     public void OnLoss()
     {
         OnStop();
-        if(loss_UI) loss_UI.SetActive(true);
+        GameManager.Instance.player?.GetComponent<CollectionSystem>().ResetInventoryWithMainSystem();
+        if (loss_UI) loss_UI.SetActive(true);
+    }
+
+    public void OnRestart()
+    {
+        OnStop();
+        SceneManager.LoadSceneAsync(gameObject.scene.buildIndex);
     }
 
     private void DisableUI()

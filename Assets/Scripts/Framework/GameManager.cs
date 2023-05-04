@@ -15,13 +15,13 @@ public class GameManager : MonoBehaviour
     private GameplayMode gameplayMode;
 
     public GameObject player { get; private set; }
+    public AndroidController androidController;
 
     public MyInput input;
 
     private static bool isGameFinished = false;
 
     public LevelData levelData;
-    public SettingsData settingsData;
 
     private void Awake()
     {
@@ -41,9 +41,8 @@ public class GameManager : MonoBehaviour
     {
         if (instance == this)
         {
+            SaveSystem.SaveLevelData();
             isGameFinished = true;
-            SaveSystem.SetLevelData(levelData);
-            SaveSystem.SetSettingsData(settingsData);
         }
     }
 
@@ -51,9 +50,12 @@ public class GameManager : MonoBehaviour
     private IEnumerator Initialize()
     {
         while (AudioManager.Instance == null) yield return null;
+        while(Inventory.Instance == null) yield return null;
+        yield return null;
        
-        levelData = SaveSystem.GetLevelData();
-        settingsData = SaveSystem.GetSettingsData();
+        SaveSystem.SyncLevelData();
+        SaveSystem.SyncInventoryData();
+        SaveSystem.SyncSettingsData();
     }
     private static GameManager GetInstance()
     {
@@ -76,4 +78,6 @@ public class GameManager : MonoBehaviour
     {
         this.player = player;
     }
+
+    public delegate void OnKeypress(int press);
 }

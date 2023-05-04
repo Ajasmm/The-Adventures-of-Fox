@@ -16,19 +16,20 @@ public class SettingsWindow : MonoBehaviour
 
     private void OnEnable()
     {
-        musicVolume.onValueChanged.AddListener(OnMusicVolumeChange);
-        sfxVolume.onValueChanged.AddListener(OnSFXVolumeChange);
-
         input = GameManager.Instance.input;
         input.Menu.Escape.performed += OnEscape;
 
-        float _musicVolume = GameManager.Instance.settingsData.musicVolume;
-        float _sfxVolume = GameManager.Instance.settingsData.sfxVolume;
+        float _musicVolume = AudioManager.Instance.musicVolume;
+        float _sfxVolume = AudioManager.Instance.sfxVolume;
 
         OnMusicVolumeChange(_musicVolume);
         OnSFXVolumeChange(_sfxVolume);
+
         musicVolume.value = _musicVolume;
         sfxVolume.value = _sfxVolume;
+
+        musicVolume.onValueChanged.AddListener(OnMusicVolumeChange);
+        sfxVolume.onValueChanged.AddListener(OnSFXVolumeChange);
     }
     private void OnDisable()
     {

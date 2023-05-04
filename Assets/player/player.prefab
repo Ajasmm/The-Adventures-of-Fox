@@ -583,6 +583,7 @@ MonoBehaviour:
   yAxisThreshold: -5
   initialHealth: 1000
   audioControl: {fileID: 8125742998807451477}
+  collectionSystem: {fileID: 1716986010769436452}
 --- !u!114 &6868108989914867529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,6 +598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   trowableObject: {fileID: 7472680412142299049, guid: 881601f596534c3409078154c95f02d2, type: 3}
+  collectionSystem: {fileID: 1716986010769436452}
   audioControl: {fileID: 8125742998807451477}
 --- !u!114 &7967117085410786361
 MonoBehaviour:

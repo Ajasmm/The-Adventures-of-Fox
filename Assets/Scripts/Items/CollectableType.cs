@@ -1,4 +1,5 @@
-﻿public enum CollectableType
+﻿[System.Serializable]
+public enum CollectableType
 {
     Gems,
     Cherry

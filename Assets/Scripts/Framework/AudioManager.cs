@@ -14,6 +14,8 @@ public class AudioManager : MonoBehaviour
     }
     private static AudioManager instance;
 
+    public float masterVolume = 1, musicVolume = 1, sfxVolume = 1;
+
     private void OnEnable()
     {
         if(instance == null)
@@ -24,17 +26,21 @@ public class AudioManager : MonoBehaviour
 
         StartCoroutine(InitializeVolume());
     }
+    private void OnDestroy()
+    {
+        Save();
+    }
 
     private IEnumerator InitializeVolume()
     {
+        GameManager gameManager = GameManager.Instance;
         yield return null;
 
         SetVolume(AudioChannels.MASTER, 1);
-        SetVolume(AudioChannels.MUSIC, GameManager.Instance.settingsData.musicVolume);
-        SetVolume(AudioChannels.SFX, GameManager.Instance.settingsData.sfxVolume);
+        SetVolume(AudioChannels.MUSIC, musicVolume);
+        SetVolume(AudioChannels.SFX, sfxVolume);
 
     }
-
     public void SetVolume(AudioChannels audioChannel, float NormalizedVolume)
     {
         if (masterMixer == null)
@@ -49,24 +55,29 @@ public class AudioManager : MonoBehaviour
         {
             case AudioChannels.MUSIC:
                 audioChannelString = "Music Volume";
-                GameManager.Instance.settingsData.musicVolume = NormalizedVolume;
+                musicVolume = NormalizedVolume;
                 break;
             case AudioChannels.SFX:
                 audioChannelString = "SFX Volume";
-                GameManager.Instance.settingsData.sfxVolume = NormalizedVolume;
+                sfxVolume = NormalizedVolume;
                 break;
             case AudioChannels.MASTER:
                 audioChannelString = "Master Volume";
+                masterVolume = NormalizedVolume;
                 break;
         }
 
-        SaveSystem.SetSettingsData(GameManager.Instance.settingsData);
+
         if(audioChannelString != null) masterMixer.SetFloat(audioChannelString, VolumeToDB(NormalizedVolume));
     }
-
     private float VolumeToDB(float NormalizedVolume)
     {
         return Mathf.Log10(NormalizedVolume) * 20;
+    }
+
+    public static void Save()
+    {
+        SaveSystem.SaveSettingsData();
     }
 }
 

@@ -30,6 +30,10 @@ public class InteractionSystem : MonoBehaviour
     {
         interactable?.Interact();
     }
+    private void UpdateController()
+    {
+        GameManager.Instance.androidController?.SetInteractionButton(interactables.Count > 0);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -37,6 +41,7 @@ public class InteractionSystem : MonoBehaviour
         if (interactable != null) interactables.Add(interactable);
          
         this.interactable = interactable;
+        UpdateController();
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -55,5 +60,7 @@ public class InteractionSystem : MonoBehaviour
                 }
             }
         }
+
+        UpdateController();
     }
 }

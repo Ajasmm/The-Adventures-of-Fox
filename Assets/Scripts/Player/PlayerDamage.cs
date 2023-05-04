@@ -8,8 +8,9 @@ public class PlayerDamage : Damagables
     [SerializeField] float yAxisThreshold = -5;
     [SerializeField] float initialHealth = 1000;
 
-    [Header("Audio")]
+    [Header("Other")]
     [SerializeField] private AudioControler audioControl;
+    [SerializeField] private CollectionSystem collectionSystem;
 
     Material playerMaterial;
     bool isCooling;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BGMusic : MonoBehaviour
 {
-    private BGMusic Instance;
+    private static BGMusic Instance;
 
     private void OnEnable()
     {

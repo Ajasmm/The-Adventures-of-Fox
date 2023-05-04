@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -11,13 +12,12 @@ public class Inventory : MonoBehaviour
     }
     private static Inventory instance;
 
-    private Dictionary<CollectableType, int> m_Inventory;
+    private Dictionary<CollectableType, int> m_Inventory = new Dictionary<CollectableType, int>();
 
     public Action<int> OnGemUpdate;
     public Action<int> OnCherryUpdate;
 
     private static bool isGameFinished = false;
-
     private void OnEnable()
     {
         if(instance == null)
@@ -27,19 +27,23 @@ public class Inventory : MonoBehaviour
         }else if(instance != this) 
             Destroy(gameObject);
 
-        m_Inventory = new Dictionary<CollectableType, int>();
+        SaveSystem.SyncInventoryData();
+
     }
     private void OnDestroy()
     {
+        if (instance != this) return;
+
+        Save();
         isGameFinished = true;
     }
 
-    public void AddItem(CollectableType type)
+    public void AddItem(CollectableType type, int count)
     {
         int stock;
         m_Inventory.TryGetValue(type, out stock);
 
-        stock++;
+        stock += count;
         m_Inventory[type] = stock;
         TriggerUIEvent(type, stock);
     }
@@ -57,9 +61,28 @@ public class Inventory : MonoBehaviour
         }
         return false;
     }
+    public bool RemoveItem(CollectableType type, int count)
+    {
+        int stock;
+        m_Inventory.TryGetValue(type, out stock);
+
+        if (stock >= count)
+        {
+            stock -= count;
+            m_Inventory[type] = stock;
+            TriggerUIEvent(type, stock);
+            return true;
+        }
+        return false;
+    }
     public void GetItemCount(CollectableType type, out int count)
     {
-        m_Inventory.TryGetValue(type, out  count);
+        m_Inventory.TryGetValue(type, out count);
+    }
+
+    public void Save()
+    {
+        SaveSystem.SaveInventoryData();
     }
 
     private void TriggerUIEvent(CollectableType type, int count)
@@ -75,6 +98,20 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public List<InventoryItem> GetList()
+    {
+        List<InventoryItem> list = new List<InventoryItem>();
+        if (m_Inventory == null)
+        {
+            Debug.Log("List is empty");
+            return list;
+        }
+
+        foreach (CollectableType type in m_Inventory.Keys)
+            list.Add(new InventoryItem(type, m_Inventory[type]));
+        
+        return list;
+    }
     private static Inventory GetInstance()
     {
         if (isGameFinished) return null;

@@ -38,6 +38,7 @@ public class WinMenu : MonoBehaviour
         if (restart_Btn) restart_Btn.onClick.AddListener(OnRestart);
         if (next_Btn && !isLastLevel) next_Btn.onClick.AddListener(OnNext);
         if (menu_Btn) menu_Btn.onClick.AddListener(OnMenu);
+
     }
     private void OnDisable()
     {
@@ -49,8 +50,7 @@ public class WinMenu : MonoBehaviour
     private void OnRestart()
     {
         SetActiveButtons(false);
-
-        SceneManager.LoadSceneAsync(this.gameObject.scene.buildIndex);
+        GameManager.Instance.GameplayMode?.OnRestart();
     }
     private void OnNext()
     {
@@ -60,8 +60,7 @@ public class WinMenu : MonoBehaviour
     private void OnMenu()
     {
         SetActiveButtons(false);
-
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(0);
     }
 
     private void SetActiveButtons(bool state)

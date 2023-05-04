@@ -9,6 +9,7 @@ public class ThrowSystem : MonoBehaviour
     [Header("Throw System")]
     [SerializeField] CollectableType type;
     [SerializeField] ThrowableCherry trowableObject;
+    [SerializeField] CollectionSystem collectionSystem;
 
     [Header("Audio")]
     [SerializeField] private AudioControler audioControl;
@@ -44,12 +45,13 @@ public class ThrowSystem : MonoBehaviour
             ThrowableCherry throwable = GetObject();
             if (throwable == null)
             {
-                Inventory.Instance.AddItem(type);
+                Inventory.Instance.AddItem(type, 1);
                 return;
             }
 
             audioControl.Throw();
             throwable.Enable(m_Transform.position + throwOffset, Vector3.right * m_Transform.localScale.x);
+            collectionSystem.RemoveItem(type, 1);
         }
     }
 

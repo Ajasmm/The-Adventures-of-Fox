@@ -23,14 +23,12 @@ public class LostMenu : MonoBehaviour
     private void OnRestart()
     {
         SetActiveButtons(false);
-
-        SceneManager.LoadSceneAsync(this.gameObject.scene.buildIndex);
+        GameManager.Instance.GameplayMode?.OnRestart();
     }
     private void OnMenu()
     {
         SetActiveButtons(false);
-
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(0);
     }
 
     private void SetActiveButtons(bool state)
