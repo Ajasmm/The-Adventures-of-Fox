@@ -40,18 +40,17 @@ public class ThrowSystem : MonoBehaviour
 
     private void Throw(InputAction.CallbackContext context)
     {
-        if (Inventory.Instance.GetItem(type))
+        if (collectionSystem.GetItem(type, 1))
         {
             ThrowableCherry throwable = GetObject();
             if (throwable == null)
             {
-                Inventory.Instance.AddItem(type, 1);
+                collectionSystem.AddItem(type, 1);
                 return;
             }
 
             audioControl.Throw();
             throwable.Enable(m_Transform.position + throwOffset, Vector3.right * m_Transform.localScale.x);
-            collectionSystem.RemoveItem(type, 1);
         }
     }
 

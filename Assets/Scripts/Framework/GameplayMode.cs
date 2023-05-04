@@ -75,14 +75,13 @@ public class GameplayMode : MonoBehaviour
     public void OnWin()
     {
         OnStop();
+        GameManager.Instance.player?.GetComponent<CollectionSystem>().UpdateMainInventory();
         Inventory.Instance.Save();
-        GameManager.Instance.player?.GetComponent<CollectionSystem>().ResetInventory();
         if(win_UI) win_UI.SetActive(true);
     }
     public void OnLoss()
     {
         OnStop();
-        GameManager.Instance.player?.GetComponent<CollectionSystem>().ResetInventoryWithMainSystem();
         if (loss_UI) loss_UI.SetActive(true);
     }
 

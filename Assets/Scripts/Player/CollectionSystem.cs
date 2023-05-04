@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,43 +9,62 @@ public class CollectionSystem : MonoBehaviour
 
     Dictionary<CollectableType, int> inventory = new Dictionary<CollectableType, int>();
 
+    public OnItemCollect OnItemCollected;
+
     private void OnEnable()
     {
         inventory.Clear();
+        SyncWithInventory();
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Collectables collectable = collision.gameObject.GetComponent<Collectables>();
         if (collectable == null) return;
 
         collectable.Collect();
-        if (!inventory.ContainsKey(collectable.type)) inventory.Add(collectable.type, 0);
-        inventory[collectable.type]++;
-        Inventory.Instance.AddItem(collectable.type, 1);
+        AddItem(collectable.type, 1);
+
+        if (OnItemCollected != null) OnItemCollected(collectable.type, inventory[collectable.type]);
+    }
+    
+    public int GetItemCount(CollectableType type)
+    {
+        if (inventory.ContainsKey(type)) return inventory[type];
+        else return 0;
     }
 
-    public void ResetInventoryWithMainSystem()
+    public void SyncWithInventory()
+    {
+        foreach(InventoryItem item in Inventory.Instance.GetList())
+        {
+            if (!inventory.ContainsKey(item.type)) inventory.Add(item.type, 0);
+            inventory[item.type] = item.count;
+            if (OnItemCollected != null) OnItemCollected(item.type, inventory[item.type]);
+        }
+    }
+    public void UpdateMainInventory()
     {
         foreach (CollectableType type in inventory.Keys)
-            Inventory.Instance.RemoveItem(type, inventory[type]);
+            Inventory.Instance.UpdateItem(type, inventory[type]);
 
-        inventory.Clear();
-    }
-    public void ResetInventory()
-    {
-        inventory.Clear();
-    }
-    public void RemoveItem(CollectableType type, int count)
-    {
-        if (!inventory.ContainsKey(type)) return;
 
-        if (inventory[type] >= count)
-        {
-            int stock = inventory[type];
-            stock -= count;
-            inventory[type] = stock;
-        }
-        else inventory[type] = 0;
     }
+    public bool GetItem(CollectableType type, int count)
+    {
+        if (!inventory.ContainsKey(type)) return false;
+        if (inventory[type] < count) return false;
+
+        inventory[type] -= count;
+        if(OnItemCollected != null) OnItemCollected(type, inventory[type]);
+        return true;
+    }
+    public void AddItem(CollectableType type, int count)
+    {
+        if (!inventory.ContainsKey(type)) inventory.Add(type, 0);
+        inventory[type] += count;
+        if (OnItemCollected != null) OnItemCollected(type, inventory[type]);
+    }
+
 }
+
+public delegate void OnItemCollect(CollectableType type, int count);

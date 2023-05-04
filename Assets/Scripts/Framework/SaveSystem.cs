@@ -51,10 +51,9 @@ public static class SaveSystem
             if (inventoryData.list == null) inventoryData.list = new List<InventoryItem>();
 
             foreach(InventoryItem inventoryItem in inventoryData.list) 
-                Inventory.Instance.AddItem(inventoryItem.type, inventoryItem.count);
-
-            Debug.Log("Save data : " + jsonData);
+                Inventory.Instance.UpdateItem(inventoryItem.type, inventoryItem.count);
         }
+
         if (inventoryData.list == null) inventoryData = new InventoryData(null);
 
     }
@@ -83,9 +82,6 @@ public static class SaveSystem
         jsonData = JsonUtility.ToJson(inventoryData);
         PlayerPrefs.SetString(inventoryKey, jsonData);
         PlayerPrefs.Save();
-
-
-        Debug.Log("Save data : " + jsonData);
     }
 }
 
@@ -127,7 +123,6 @@ public struct InventoryData
             list.Add(new InventoryItem(type, inventory[type]));
     }
 }
-
 [Serializable]
 public struct InventoryItem
 {

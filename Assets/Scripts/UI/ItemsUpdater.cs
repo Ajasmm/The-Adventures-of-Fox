@@ -1,34 +1,51 @@
 using UnityEngine;
 using TMPro;
-
+using System.Collections;
 
 public class ItemsUpdater : MonoBehaviour
 {
     [SerializeField] TMP_Text gems;
     [SerializeField] TMP_Text cherry;
 
+    CollectionSystem collectionSystem;
+    Coroutine initializeRoutine;
+
     private void OnEnable()
     {
-        int count = 0;
-        Inventory.Instance.GetItemCount(CollectableType.Gems, out count);
-        UpdateGem(count);
-        Inventory.Instance.OnGemUpdate += UpdateGem;
-
-        count = 0;
-        Inventory.Instance.GetItemCount(CollectableType.Cherry, out count);
-        UpdateCherry(count);
-        Inventory.Instance.OnCherryUpdate += UpdateCherry;
+        if(initializeRoutine != null) StopCoroutine(initializeRoutine);
+        StartCoroutine(SyncWithPlayer());
     }
 
     private void OnDisable()
     {
-        Inventory instance = Inventory.Instance;
-        if (instance == null) return;
-
-        instance.OnGemUpdate -= UpdateGem;
-        instance.OnCherryUpdate -= UpdateCherry;
+        if (initializeRoutine != null) StopCoroutine(initializeRoutine);
+        collectionSystem.OnItemCollected -= OnItemCollected;
     }
 
+    private IEnumerator SyncWithPlayer()
+    {
+        while (GameManager.Instance.player == null) yield return null;
+
+        collectionSystem = GameManager.Instance.player.GetComponent<CollectionSystem>();
+
+        UpdateGem(collectionSystem.GetItemCount(CollectableType.Gems));
+        UpdateCherry(collectionSystem.GetItemCount(CollectableType.Cherry));
+
+        collectionSystem.OnItemCollected += OnItemCollected;
+    }
+
+    private void OnItemCollected(CollectableType type, int count)
+    {
+        switch (type)
+        {
+            case CollectableType.Cherry:
+                UpdateCherry(count);
+                break;
+            case CollectableType.Gems:
+                UpdateGem(count);
+                break;
+        }
+    }
     private void UpdateGem(int count)
     {
         gems.text = count.ToString();

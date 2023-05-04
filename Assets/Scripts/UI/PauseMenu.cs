@@ -44,13 +44,11 @@ public class PauseMenu : MonoBehaviour
     {
         SetActiveButtons(false);
 
-        GameManager.Instance.player?.GetComponent<CollectionSystem>()?.ResetInventoryWithMainSystem();
         GameManager.Instance.GameplayMode?.OnRestart();
     }
     private void OnMenu()
     {
         SetActiveButtons(false);
-        GameManager.Instance.player?.GetComponent<CollectionSystem>()?.ResetInventoryWithMainSystem();
         SceneManager.LoadSceneAsync(0);
     }
 

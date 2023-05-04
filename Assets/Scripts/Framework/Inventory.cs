@@ -38,64 +38,15 @@ public class Inventory : MonoBehaviour
         isGameFinished = true;
     }
 
-    public void AddItem(CollectableType type, int count)
+   
+    public void UpdateItem(CollectableType type, int count)
     {
-        int stock;
-        m_Inventory.TryGetValue(type, out stock);
-
-        stock += count;
-        m_Inventory[type] = stock;
-        TriggerUIEvent(type, stock);
+        if(!m_Inventory.ContainsKey(type)) m_Inventory.Add(type, 0);
+        m_Inventory[type] = count;
     }
-    public bool GetItem(CollectableType type)
-    {
-        int stock;
-        m_Inventory.TryGetValue(type, out stock);
-        
-        if(stock > 0)
-        {
-            stock--;
-            m_Inventory[type] = stock;
-            TriggerUIEvent(type, stock);
-            return true;
-        }
-        return false;
-    }
-    public bool RemoveItem(CollectableType type, int count)
-    {
-        int stock;
-        m_Inventory.TryGetValue(type, out stock);
-
-        if (stock >= count)
-        {
-            stock -= count;
-            m_Inventory[type] = stock;
-            TriggerUIEvent(type, stock);
-            return true;
-        }
-        return false;
-    }
-    public void GetItemCount(CollectableType type, out int count)
-    {
-        m_Inventory.TryGetValue(type, out count);
-    }
-
     public void Save()
     {
         SaveSystem.SaveInventoryData();
-    }
-
-    private void TriggerUIEvent(CollectableType type, int count)
-    {
-        switch (type)
-        {
-            case CollectableType.Gems:
-                if(OnGemUpdate != null) OnGemUpdate(count);
-                break;
-            case CollectableType.Cherry:
-                if(OnCherryUpdate != null) OnCherryUpdate(count);
-                break;
-        }
     }
 
     public List<InventoryItem> GetList()
